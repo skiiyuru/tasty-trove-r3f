@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic"
 import { Suspense } from "react"
 import { TypographyH1, TypographyH3 } from "@/components/typography"
+import { useTheme } from "next-themes"
 
 const Duck = dynamic(
   () => import("@/components/canvas/Examples").then((mod) => mod.Duck),
@@ -43,23 +44,18 @@ const Common = dynamic(
 )
 
 export default function Page() {
+  const { theme } = useTheme()
+
+  const color = theme === "dark" ? "#020817" : "white"
+
   return (
-    <>
-      <div className="mx-auto flex w-full flex-col flex-wrap items-center p-12 md:flex-row  lg:w-4/5 border">
-        {/* second row */}
-        <div className="relative my-12 h-48 w-full py-6 sm:w-1/2 md:mb-40">
-          <View orbit className="relative h-full sm:h-48 sm:w-full">
-            <Suspense fallback={null}>
-              <Duck route="/blob" scale={2} position={[0, -1.6, 0]} />
-              <Common color={"orange"} />
-            </Suspense>
-          </View>
-        </div>
-        <div className="w-full p-6 sm:w-1/2">
-          <TypographyH1>Discover, Share, Savor</TypographyH1>
-          <TypographyH3>Your Culinary Adventure Awaits!</TypographyH3>
-        </div>
-      </div>
-    </>
+    <div className="fixed top-0 left-0  h-screen w-screen">
+      <View orbit className="h-full">
+        <Suspense fallback={null}>
+          <Duck route="/blob" scale={2} position={[0, -1.6, 0]} />
+          <Common color={color} />
+        </Suspense>
+      </View>
+    </div>
   )
 }
