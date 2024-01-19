@@ -1,16 +1,3 @@
-"use client"
-
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
 import { SheetTrigger, SheetContent, Sheet } from "@/components/ui/sheet"
 import Link from "next/link"
 import { ModeToggle } from "./mode-toggle"
@@ -18,6 +5,7 @@ import { TypographyH3, TypographyH4 } from "./typography"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { type ComponentPropsWithoutRef } from "react"
+import NavMenu from "./nav-menu"
 
 type SvgProps = ComponentPropsWithoutRef<"svg">
 
@@ -61,19 +49,6 @@ function MountainIcon(props: SvgProps) {
   )
 }
 
-type NavItem = { link: string; label: string }
-
-const NavItems: NavItem[] = [
-  {
-    link: "/meals",
-    label: "Browse Meals",
-  },
-  {
-    link: "/community",
-    label: "Trove Community",
-  },
-]
-
 export default function MainHeader() {
   return (
     <header
@@ -92,23 +67,7 @@ export default function MainHeader() {
             <span className="sr-only">Tasty Trove</span>
           </Link>
 
-          <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList>
-              {NavItems.map((i) => {
-                return (
-                  <NavigationMenuItem key={i.label}>
-                    <Link href={i.link} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        {i.label}
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                )
-              })}
-            </NavigationMenuList>
-          </NavigationMenu>
+          <NavMenu menuClasses="hidden lg:flex" />
         </div>
 
         <div className="flex items-center">
@@ -121,25 +80,7 @@ export default function MainHeader() {
             </SheetTrigger>
 
             <SheetContent side="right">
-              <Link className="mr-6 hidden lg:flex" href="/">
-                <MountainIcon className="h-6 w-6" />
-                <TypographyH3>Tasty Trove</TypographyH3>
-                <span className="sr-only">Tasty Trove</span>
-              </Link>
-
-              <div className="grid gap-2 py-6">
-                {NavItems.map((i) => {
-                  return (
-                    <Link
-                      key={i.label}
-                      className="flex w-full items-center py-2 text-lg font-semibold"
-                      href={i.link}
-                    >
-                      {i.label}
-                    </Link>
-                  )
-                })}
-              </div>
+              <NavMenu listClasses="flex flex-col items-start gap-2 py-6" />
             </SheetContent>
           </Sheet>
 

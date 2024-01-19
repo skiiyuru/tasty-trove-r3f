@@ -4,9 +4,14 @@ import dynamic from "next/dynamic"
 import { Suspense } from "react"
 import { TypographyH1, TypographyH3 } from "@/components/typography"
 import { useTheme } from "next-themes"
+import { Stage } from "@react-three/drei"
 
 const Duck = dynamic(
   () => import("@/components/canvas/Examples").then((mod) => mod.Duck),
+  { ssr: false }
+)
+const Food = dynamic(
+  () => import("@/components/canvas/Examples").then((mod) => mod.Food),
   { ssr: false }
 )
 const View = dynamic(
@@ -38,6 +43,7 @@ const View = dynamic(
     ),
   }
 )
+
 const Common = dynamic(
   () => import("@/components/canvas/View").then((mod) => mod.Common),
   { ssr: false }
@@ -49,13 +55,24 @@ export default function Page() {
   const color = theme === "dark" ? "#020817" : "white"
 
   return (
-    <div className="fixed top-0 left-0  h-screen w-screen">
-      <View orbit className="h-full">
-        <Suspense fallback={null}>
-          <Duck route="/blob" scale={2} position={[0, -1.6, 0]} />
-          <Common color={color} />
-        </Suspense>
-      </View>
-    </div>
+    <>
+      <div className="fixed inset-0  h-screen">
+        <View orbit className="h-full">
+          <Suspense fallback={null}>
+            <Stage
+              adjustCamera
+              intensity={0.5}
+              shadows="contact"
+              environment="city"
+            >
+              <Food scale={2} position={[0, 0.5, -1]} />
+            </Stage>
+            {/* <Duck route="/blob" scale={2} position={[0, -1.6, 0]} /> */}
+            {/* <Common color={color} /> */}
+          </Suspense>
+        </View>
+      </div>
+      {/* <div className="fixed inset-x-0 bottom-0 h-20 bg-black  z-10">hello</div> */}
+    </>
   )
 }
